@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+    <title>Word Guess</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">
+                    Word Guess - Athletes
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-4 text-center">
+                <img class="img-fluid rounded" id="athlete-picture" src="assets/images/sports.jpg">
+                <div id="athlete-name">
+
+                </div>
+            </div>
+            <div class="col-4 text-center">
+                <div id="directions">
+                    Press any key to get started!
+                </div>
+                <div>
+                    Score:
+                </div>
+                <div id="score">
+                    Wins 0 Loses 0
+                </div>
+                <div>
+                    Hint:
+                </div>
+                <div id="current-hint">
+
+                </div>
+                <div>
+                    Current Word:
+                </div>
+                <div id="current-word">
+
+                </div>
+                <div>
+                    Guesses Remaining
+                </div>
+                <div id="guesses-remaining">
+                    8
+                </div>
+                <div>
+                    Already Guessed Letters:
+                </div>
+                <div id="guessed-letters">
+
+                </div>
+                
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        
+        var athletes = [
+            {athName: "Dirk Nowitzki", athHint: "Mavs GOAT", athImage: "assets/images/dirk.jpg" },
+            {athName: "Michael Jordan", athHint: "NBA GOAT", athImage: "assets/images/mj.jpg" },
+            {athName: "Peyton Manning", athHint: "Eli's Brother", athImage: "assets/images/peyton.jpg" },
+            {athName: "Tom Brady", athHint: "NFL Cheating GOAT", athImage: "assets/images/tb13.jpg" },
+            {athName: "Mike Trout", athHint: "Probable MLB GOAT", athImage: "assets/images/trout.jpg" },
+            {athName: "Nolan Ryan", athHint: "The Express", athImage: "assets/images/express.jpg" },
+            {athName: "Lance Armstrong", athHint: "Cheating GOAT", athImage: "assets/images/lance.jpg" },
+            {athName: "Lebron James", athHint: "Not 2, Not 3, Not 4, Not 5, Not 6, Not 7...", athImage: "assets/images/lebron.jpg" },
+            {athName: "Muhammad Ali", athHint: "The Greatest", athImage: "assets/images/ali.jpg" },
+            {athName: "Mike Tyson", athHint: "Undisputed", athImage: "assets/images/tyson.jpg" },
+            {athName: "Tiger Woods", athHint: "Wearing red on Sundays", athImage: "assets/images/tiger.jpg" },
+            {athName: "Wayne Gretzky", athHint: "The Great One", athImage: "assets/images/wayne.jpg" },
+            {athName: "Deion Sanders", athHint: "Prime Time", athImage: "assets/images/deion.jpg" },
+            {athName: "Serena Williams", athHint: "Most Dominant Ever", athImage: "assets/images/serena.jpg" },
+            {athName: "Wilt Chamberlain", athHint: "The Stilt", athImage: "assets/images/wilt.jpg" },
+            {athName: "Florence Joyner", athHint: "Flo-Jo", athImage: "assets/images/flojo.jpg" },
+            {athName: "Shawn Kemp", athHint: "The Reignman", athImage: "assets/images/kemp.jpg" },
+            {athName: "Jon Jones", athHint: "Bones", athImage: "assets/images/bones.jpg" },
+            {athName: "Luka Doncic", athHint: "The Matador", athImage: "assets/images/luka.jpg" },
+            {athName: "Kobe Bryant", athHint: "Black Mamba", athImage: "assets/images/kobe.jpg" },
+            {athName: "Allen Iverson", athHint: "The Answer", athImage: "assets/images/iverson.jpg" },
+            {athName: "Josh Hamilton", athHint: "Hambone", athImage: "assets/images/ham.jpg" },
+            {athName: "Giannis Antetokounmpo", athHint: "Greek Freak", athImage: "assets/images/giannis.jpg" }
+
+        ];
+
+        function convertBlanks(myName, myGuesses) {
+            var blanks = "";
+            for (var x=0; x < myName.length; x++){
+                if (myGuesses.includes(myName.charAt(x).toLowerCase())) {
+                    blanks = blanks + myName.charAt(x) + " ";
+                } else if (myName.charAt(x) === " ") {
+                    blanks = blanks + " \xa0 \xa0 ";
+                } else {
+                    blanks = blanks + "_ ";
+                };
+            };
+            return blanks;
+        };
+
+        function pickNextAthlete() {
+            currentID = Math.floor(Math.random() * (athletes.length));
+            while (previousIDs.includes(currentID) && previousIDs.length<athletes.length){
+                currentID = Math.floor(Math.random() * (athletes.length));
+            };
+            previousIDs.push(currentID);
+            guessesRemaining = 8;
+            guessedLetters = [];
+            updateBoard();
+        };
+
+        function updateBoard() {
+            $("#current-hint").text(athletes[currentID].athHint);
+            $("#current-word").text(convertBlanks(athletes[currentID].athName,guessedLetters));
+            $("#guessed-letters").text(guessLettersMinus());
+            if (guessesRemaining<=3) {
+                $("#guesses-remaining").css("color", "red");
+            } else {
+                $("#guesses-remaining").css("color", "white");
+            }
+            $("#guesses-remaining").text(guessesRemaining)
+            $("#score").text("Wins " + numWins + "  Loses " + numLoses);
+        };
+
+        function guessLettersMinus() {
+            var minus = [];
+            for (x=0; x<guessedLetters.length; x++){
+                if (!athletes[currentID].athName.toLowerCase().includes(guessedLetters[x])){
+                    minus.push(guessedLetters[x]);
+                }
+            }
+            return minus;
+        };
+
+        var previousIDs = [];
+        var numWins = 0;
+        var numLoses = 0;
+        var currentID;
+        var guessesRemaining = 8;
+        var guessedLetters = [];
+        var alphabet = "abcdefghijklmnopqrstuvwxyz"
+
+
+
+        $(document).keyup(function(event){ 
+            if (guessedLetters.includes(event.key)) {
+                $("#directions").css("color", "yellow");
+                $("#directions").html("You've already guessed that letter!! <br> Please guess another.");
+            } else if (alphabet.includes(event.key)) {
+                guessedLetters.push(event.key);
+                
+                
+                if (!(athletes[currentID].athName.toLowerCase().includes(event.key))) {
+                    guessesRemaining--;
+                    $("#directions").css("color", "red");
+                    $("#directions").html("Sorry, " + event.key +" is not in the answer. <br> Try again.");
+                    if (guessesRemaining === 0) {
+                        $("#directions").html("Sorry, you used too many guesses. <br> The correct answer was " + athletes[currentID].athName + "<br> Good luck on the next one.");
+                        pickNextAthlete();
+                        numLoses++;
+                    };
+                } else {
+                    $("#directions").css("color", "yellow");
+                    $("#directions").html("Nice!!! " + event.key +" is in the answer. <br> Guess another.");
+                }
+                updateBoard();
+                
+                if (!($("#current-word").text().includes("_"))) {
+                    numWins++;
+                    $("#athlete-picture").attr("src",athletes[currentID].athImage);
+                    $("#athlete-name").html(athletes[currentID].athName);
+                    $("#directions").css("color", "lightgreen");
+                    $("#directions").html("Congratulations!!! <br> Now try another.");
+                    pickNextAthlete();
+                }
+            } else {
+                $("#directions").css("color", "red");
+                $("#directions").html("That is not a valid guess. <br> Please only guess letters.");
+            }
+        });
+                    
+        $(document).ready(pickNextAthlete()); 
+
+        
+        
+    </script>
+    
+    <script src="assets/javascript/game.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
