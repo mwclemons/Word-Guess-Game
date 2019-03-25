@@ -96,6 +96,18 @@
             {athName: "Kobe Bryant", athHint: "Black Mamba", athImage: "assets/images/kobe.jpg" },
             {athName: "Allen Iverson", athHint: "The Answer", athImage: "assets/images/iverson.jpg" },
             {athName: "Josh Hamilton", athHint: "Hambone", athImage: "assets/images/ham.jpg" },
+            {athName: "Hakeem Olajuwon", athHint: "The Dream", athImage: "assets/images/dream.jpg" },
+            {athName: "Shaquille O'neal", athHint: "The Diesel", athImage: "assets/images/shaq.jpg" },
+            {athName: "Ray Allen", athHint: "Jesus Shuttlesworth", athImage: "assets/images/ray.jpg" },
+            {athName: "Michael Irvin", athHint: "The Playmaker", athImage: "assets/images/irvin.jpg" },
+            {athName: "Alex Rodriguez", athHint: "Coulda been MLB GOAT", athImage: "assets/images/arod.jpg" },
+            {athName: "Steve McNair", athHint: "Titans GOAT", athImage: "assets/images/mcnair.jpg" },
+            {athName: "Steve Nash", athHint: "Captain Canada", athImage: "assets/images/nash.jpg" },
+            {athName: "Usain Bolt", athHint: "Lightning", athImage: "assets/images/bolt.jpg" },
+            {athName: "Randy Johnson", athHint: "The Big Unit", athImage: "assets/images/unit.jpg" },
+            {athName: "Mariano Rivera", athHint: "Sandman", athImage: "assets/images/sand.jpg" },
+            {athName: "Ken Griffey Jr", athHint: "The Kid", athImage: "assets/images/kid.jpg" },
+            {athName: "Mike Modano", athHint: "Stars GOAT", athImage: "assets/images/modano.jpg" },
             {athName: "Giannis Antetokounmpo", athHint: "Greek Freak", athImage: "assets/images/giannis.jpg" }
 
         ];
@@ -107,6 +119,8 @@
                     blanks = blanks + myName.charAt(x) + " ";
                 } else if (myName.charAt(x) === " ") {
                     blanks = blanks + " \xa0 \xa0 ";
+                } else if (myName.charAt(x) === "'") {
+                    blanks = blanks + "' ";
                 } else {
                     blanks = blanks + "_ ";
                 };
